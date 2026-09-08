@@ -59,6 +59,9 @@ public class BatteryHealthPreferenceController extends BasePreferenceController 
     }
 
     private CharSequence getHealthString(int health) {
+        if (health > 7 && health <= 100) {
+            return mContext.getString(R.string.battery_health_good) + " (" + health + "%)";
+        }
         switch (health) {
             case BatteryManager.BATTERY_HEALTH_GOOD:
                 return mContext.getString(R.string.battery_health_good);
