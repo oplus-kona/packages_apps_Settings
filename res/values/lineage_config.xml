@@ -38,6 +38,17 @@
     <!-- Show battery Maximum Capacity -->
     <bool name="config_show_battery_maximum_capacity">true</bool>
 
+    <!-- Custom sysfs node paths for battery info. Empty by default (falls back to BatteryManager intent) -->
+    <string name="config_battery_cycle_count_node" translatable="false"></string>
+    <string name="config_battery_maximum_capacity_node" translatable="false"></string>
+    <string name="config_battery_design_capacity_node" translatable="false"></string>
+    <string name="config_battery_voltage_node" translatable="false"></string>
+    <string name="config_battery_temperature_node" translatable="false"></string>
+    <string name="config_battery_health_node" translatable="false"></string>
+    <string name="config_battery_technology_node" translatable="false"></string>
+    <string name="config_battery_manufacture_date_node" translatable="false"></string>
+    <string name="config_battery_first_use_date_node" translatable="false"></string>
+
     <!-- ComponentName to launch a vendor-specific enrollment activity if available -->
     <string name="config_face_enroll">com.android.settings/com.google.android.settings.biometrics.face.FaceEnrollActivityDirector</string>
 

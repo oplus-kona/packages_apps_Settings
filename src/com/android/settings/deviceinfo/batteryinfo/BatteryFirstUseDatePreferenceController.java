@@ -19,6 +19,7 @@ package com.android.settings.deviceinfo.batteryinfo;
 import android.content.Context;
 import android.os.BatteryManager;
 
+import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 import com.android.settings.fuelgauge.BatterySettingsFeatureProvider;
 import com.android.settings.fuelgauge.BatteryUtils;
@@ -45,6 +46,9 @@ public class BatteryFirstUseDatePreferenceController extends BasePreferenceContr
 
     @Override
     public int getAvailabilityStatus() {
+        if (BatteryInfoUtils.isNodeValid(mContext, R.string.config_battery_first_use_date_node)) {
+            return getFirstUseDate() > 0 ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        }
         return mBatterySettingsFeatureProvider.isFirstUseDateAvailable(mContext, getFirstUseDate())
                 ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
     }
@@ -58,9 +62,17 @@ public class BatteryFirstUseDatePreferenceController extends BasePreferenceContr
 
     private long getFirstUseDate() {
         if (mFirstUseDateInMs == 0L) {
-            final long firstUseDateInSec = mBatteryManager.getLongProperty(
-                    BatteryManager.BATTERY_PROPERTY_FIRST_USAGE_DATE);
-            mFirstUseDateInMs = TimeUnit.MILLISECONDS.convert(firstUseDateInSec, TimeUnit.SECONDS);
+            long customDate = BatteryInfoUtils.readLongNode(
+                    mContext, R.string.config_battery_first_use_date_node, 0L);
+            if (customDate > 0L) {
+                mFirstUseDateInMs = customDate > 1_000_000_000_000L
+                        ? customDate
+                        : TimeUnit.MILLISECONDS.convert(customDate, TimeUnit.SECONDS);
+            } else {
+                final long firstUseDateInSec = mBatteryManager.getLongProperty(
+                        BatteryManager.BATTERY_PROPERTY_FIRST_USAGE_DATE);
+                mFirstUseDateInMs = TimeUnit.MILLISECONDS.convert(firstUseDateInSec, TimeUnit.SECONDS);
+            }
         }
         return mFirstUseDateInMs;
     }

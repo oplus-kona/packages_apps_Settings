@@ -40,11 +40,25 @@ public class BatteryHealthPreferenceController extends BasePreferenceController 
 
     @Override
     public CharSequence getSummary() {
+        String customHealth = BatteryInfoUtils.readNode(mContext, R.string.config_battery_health_node);
+        if (customHealth != null && !customHealth.isEmpty()) {
+            try {
+                int healthInt = Integer.parseInt(customHealth);
+                return getHealthString(healthInt);
+            } catch (NumberFormatException e) {
+                return customHealth;
+            }
+        }
+
         final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
         final int health =
                 batteryIntent.getIntExtra(
                         BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_UNKNOWN);
 
+        return getHealthString(health);
+    }
+
+    private CharSequence getHealthString(int health) {
         switch (health) {
             case BatteryManager.BATTERY_HEALTH_GOOD:
                 return mContext.getString(R.string.battery_health_good);

@@ -55,8 +55,10 @@ public class BatteryInfoFragment extends DashboardFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFooterPreference.setVisible(
-                getContext().getResources().getBoolean(R.bool.config_show_battery_cycle_count));
+        boolean cycleCountAvailable = BatteryInfoUtils.isNodeValid(
+                getContext(), R.string.config_battery_cycle_count_node)
+                || getContext().getResources().getBoolean(R.bool.config_show_battery_cycle_count);
+        mFooterPreference.setVisible(cycleCountAvailable);
     }
 
     @Override

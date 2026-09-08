@@ -45,11 +45,15 @@ public class BatteryVoltagePreferenceController extends BasePreferenceController
 
     @Override
     public CharSequence getSummary() {
-        final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int voltageMillivolts = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
+        int voltageVal = BatteryInfoUtils.readIntNode(
+                mContext, R.string.config_battery_voltage_node, -1);
+        if (voltageVal <= 0) {
+            final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+            voltageVal = batteryIntent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
+        }
 
-        if (voltageMillivolts > 0) {
-            float voltage = voltageMillivolts / 1_000f;
+        if (voltageVal > 0) {
+            float voltage = voltageVal > 100_000 ? voltageVal / 1_000_000f : voltageVal / 1_000f;
 
             return MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
                     .format(new Measure(voltage, MeasureUnit.VOLT));

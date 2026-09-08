@@ -36,14 +36,21 @@ public class BatteryCycleCountPreferenceController extends BasePreferenceControl
 
     @Override
     public int getAvailabilityStatus() {
+        if (BatteryInfoUtils.isNodeValid(mContext, R.string.config_battery_cycle_count_node)) {
+            return AVAILABLE;
+        }
         return mContext.getResources().getBoolean(R.bool.config_show_battery_cycle_count)
                 ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
     @Override
     public CharSequence getSummary() {
-        final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int cycleCount = batteryIntent.getIntExtra(BatteryManager.EXTRA_CYCLE_COUNT, -1);
+        int cycleCount = BatteryInfoUtils.readIntNode(
+                mContext, R.string.config_battery_cycle_count_node, -1);
+        if (cycleCount < 0) {
+            final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+            cycleCount = batteryIntent.getIntExtra(BatteryManager.EXTRA_CYCLE_COUNT, -1);
+        }
 
         return cycleCount <= 0
                 ? mContext.getText(R.string.battery_cycle_count_not_available)

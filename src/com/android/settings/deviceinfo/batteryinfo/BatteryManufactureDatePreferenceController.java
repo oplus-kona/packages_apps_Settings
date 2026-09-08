@@ -19,6 +19,7 @@ package com.android.settings.deviceinfo.batteryinfo;
 import android.content.Context;
 import android.os.BatteryManager;
 
+import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 import com.android.settings.fuelgauge.BatterySettingsFeatureProvider;
 import com.android.settings.fuelgauge.BatteryUtils;
@@ -45,6 +46,9 @@ public class BatteryManufactureDatePreferenceController extends BasePreferenceCo
 
     @Override
     public int getAvailabilityStatus() {
+        if (BatteryInfoUtils.isNodeValid(mContext, R.string.config_battery_manufacture_date_node)) {
+            return getManufactureDate() > 0 ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        }
         return mBatterySettingsFeatureProvider.isManufactureDateAvailable(mContext,
                 getManufactureDate())
                 ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
@@ -59,10 +63,18 @@ public class BatteryManufactureDatePreferenceController extends BasePreferenceCo
 
     private long getManufactureDate() {
         if (mManufactureDateInMs == 0L) {
-            final long manufactureDateInSec = mBatteryManager.getLongProperty(
-                    BatteryManager.BATTERY_PROPERTY_MANUFACTURING_DATE);
-            mManufactureDateInMs = TimeUnit.MILLISECONDS.convert(manufactureDateInSec,
-                    TimeUnit.SECONDS);
+            long customDate = BatteryInfoUtils.readLongNode(
+                    mContext, R.string.config_battery_manufacture_date_node, 0L);
+            if (customDate > 0L) {
+                mManufactureDateInMs = customDate > 1_000_000_000_000L
+                        ? customDate
+                        : TimeUnit.MILLISECONDS.convert(customDate, TimeUnit.SECONDS);
+            } else {
+                final long manufactureDateInSec = mBatteryManager.getLongProperty(
+                        BatteryManager.BATTERY_PROPERTY_MANUFACTURING_DATE);
+                mManufactureDateInMs = TimeUnit.MILLISECONDS.convert(manufactureDateInSec,
+                        TimeUnit.SECONDS);
+            }
         }
         return mManufactureDateInMs;
     }

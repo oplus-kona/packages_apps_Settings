@@ -45,12 +45,15 @@ public class BatteryTemperaturePreferenceController extends BasePreferenceContro
 
     @Override
     public CharSequence getSummary() {
-        final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int temperatureTenths =
-                batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
+        int tempVal = BatteryInfoUtils.readIntNode(
+                mContext, R.string.config_battery_temperature_node, -1);
+        if (tempVal <= 0) {
+            final Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+            tempVal = batteryIntent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
+        }
 
-        if (temperatureTenths > 0) {
-            float temperature = temperatureTenths / 10f;
+        if (tempVal > 0) {
+            float temperature = tempVal > 1_000 ? tempVal / 1000f : tempVal / 10f;
 
             return MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
                     .format(new Measure(temperature, MeasureUnit.CELSIUS));

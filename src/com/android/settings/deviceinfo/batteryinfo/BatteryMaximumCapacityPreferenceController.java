@@ -37,36 +37,46 @@ public class BatteryMaximumCapacityPreferenceController extends BasePreferenceCo
 
     @Override
     public int getAvailabilityStatus() {
+        if (BatteryInfoUtils.isNodeValid(mContext, R.string.config_battery_maximum_capacity_node)) {
+            return AVAILABLE;
+        }
         boolean isFeatureEnabled = mContext.getResources().getBoolean(R.bool.config_show_battery_maximum_capacity);
         return isFeatureEnabled ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
     @Override
     public CharSequence getSummary() {
-        Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int maxCapacityUah =
-                batteryIntent.getIntExtra(BatteryManager.EXTRA_MAXIMUM_CAPACITY, -1);
+        int maxCapacityUah = BatteryInfoUtils.readIntNode(
+                mContext, R.string.config_battery_maximum_capacity_node, -1);
+        if (maxCapacityUah <= 0) {
+            Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+            maxCapacityUah = batteryIntent.getIntExtra(BatteryManager.EXTRA_MAXIMUM_CAPACITY, -1);
+        }
 
-        boolean usePowerProfileFirst = mContext.getResources().getBoolean(R.bool.config_use_power_profile_for_battery_capacity);
-        int designCapacityUah = -1;
-
-        if (usePowerProfileFirst) {
-            final PowerProfile profile = new PowerProfile(mContext);
-            designCapacityUah = (int) profile.getBatteryCapacity() * 1000;
-            if (designCapacityUah <= 0) {
-                designCapacityUah = batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
-            }
-        } else {
-            designCapacityUah = batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
-            if (designCapacityUah <= 0) {
+        int designCapacityUah = BatteryInfoUtils.readIntNode(
+                mContext, R.string.config_battery_design_capacity_node, -1);
+        if (designCapacityUah <= 0) {
+            boolean usePowerProfileFirst = mContext.getResources().getBoolean(R.bool.config_use_power_profile_for_battery_capacity);
+            if (usePowerProfileFirst) {
                 final PowerProfile profile = new PowerProfile(mContext);
                 designCapacityUah = (int) profile.getBatteryCapacity() * 1000;
+                if (designCapacityUah <= 0) {
+                    Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+                    designCapacityUah = batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
+                }
+            } else {
+                Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
+                designCapacityUah = batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
+                if (designCapacityUah <= 0) {
+                    final PowerProfile profile = new PowerProfile(mContext);
+                    designCapacityUah = (int) profile.getBatteryCapacity() * 1000;
+                }
             }
         }
 
         if (maxCapacityUah > 0 && designCapacityUah > 0) {
-            int maxCapacity = maxCapacityUah / 1_000;
-            int designCapacity = designCapacityUah / 1_000;
+            int maxCapacity = maxCapacityUah > 100_000 ? maxCapacityUah / 1_000 : maxCapacityUah;
+            int designCapacity = designCapacityUah > 100_000 ? designCapacityUah / 1_000 : designCapacityUah;
             int percentage = (maxCapacity * 100) / designCapacity;
 
             return mContext.getString(
