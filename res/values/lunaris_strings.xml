@@ -281,4 +281,8 @@
     <string name="one_time_data_limit_when_exceeded">When exceeded</string>
     <string name="one_time_data_limit_turn_off_notify">Turn off and notify</string>
     <string name="one_time_data_limit_notify_only">Notify only</string>
+
+    <!-- Battery categories -->
+    <string name="power_management_category_title">Power management</string>
+    <string name="charging_battery_health_category_title">Charging &amp; battery health</string>
 </resources>
