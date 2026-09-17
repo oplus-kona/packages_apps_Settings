@@ -616,6 +616,7 @@ public class Settings extends SettingsActivity {
      * Activity for Double Tap Power Settings
      */
     public static class DoubleTapPowerSettingsActivity extends SettingsActivity { /* empty */ }
+    public static class QuickLaunchSettingsActivity extends SettingsActivity { /* empty */ }
 
     public static class PreviouslyConnectedDeviceActivity extends SettingsActivity { /* empty */ }
 

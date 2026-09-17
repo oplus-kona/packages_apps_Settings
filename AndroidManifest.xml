@@ -73,6 +73,8 @@
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
     <uses-permission android:name="android.permission.BATTERY_STATS"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_SHORTCUTS" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.MOVE_PACKAGE" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -5833,6 +5835,34 @@
                 android:value="@string/menu_key_system"/>
             <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
                 android:value="true" />
+        </activity>
+
+        <activity
+            android:name="Settings$QuickLaunchSettingsActivity"
+            android:label="@string/quick_launch_title"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter android:priority="1">
+                <action android:name="android.settings.QUICK_LAUNCH_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.gestures.quicklaunch.QuickLaunchSettings"/>
+            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY"
+                android:value="@string/menu_key_system"/>
+            <meta-data android:name="com.android.settings.PRIMARY_PROFILE_CONTROLLED"
+                android:value="true" />
+        </activity>
+
+        <activity
+            android:name=".gestures.quicklaunch.EditQuickLaunchActivity"
+            android:label="@string/fingerprint_ql_setting_edit_title"
+            android:exported="true"
+            android:theme="@style/Theme.SubSettings">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EDIT_QUICK_LAUNCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <receiver android:name=".safetycenter.SafetySourceBroadcastReceiver"
