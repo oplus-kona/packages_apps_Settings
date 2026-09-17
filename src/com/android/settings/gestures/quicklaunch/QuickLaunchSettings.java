@@ -57,7 +57,7 @@ public class QuickLaunchSettings extends DashboardFragment {
             new BaseSearchIndexProvider(R.xml.quick_launch_settings) {
                 @Override
                 protected boolean isPageSearchEnabled(Context context) {
-                    return true;
+                    return QuickLaunchHelper.getInstance(context).isUdfpsSupported();
                 }
             };
 }

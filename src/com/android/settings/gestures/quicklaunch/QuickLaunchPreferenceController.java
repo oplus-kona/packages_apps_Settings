@@ -29,7 +29,8 @@ public class QuickLaunchPreferenceController extends BasePreferenceController {
 
     @Override
     public int getAvailabilityStatus() {
-        return AVAILABLE;
+        return QuickLaunchHelper.getInstance(mContext).isUdfpsSupported()
+                ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
     @Override

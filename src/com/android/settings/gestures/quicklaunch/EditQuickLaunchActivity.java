@@ -76,6 +76,10 @@ public class EditQuickLaunchActivity extends FragmentActivity {
         setContentView(R.layout.quick_launch_edit_activity);
 
         mHelper = QuickLaunchHelper.getInstance(this);
+        if (!mHelper.isUdfpsSupported()) {
+            finish();
+            return;
+        }
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         initToolbar();

@@ -29,6 +29,8 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
+import android.hardware.fingerprint.FingerprintManager;
+import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.MediaStore;
@@ -39,6 +41,7 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 
 import com.android.settings.R;
+import com.android.settings.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +65,7 @@ public class QuickLaunchHelper {
     private final LauncherApps mLauncherApps;
     private final PackageManager mPackageManager;
     private final int mDensityDpi;
+    private Boolean mIsUdfpsSupported;
 
     private QuickLaunchHelper(Context context) {
         mContext = context.getApplicationContext();
@@ -75,6 +79,25 @@ public class QuickLaunchHelper {
             sInstance = new QuickLaunchHelper(context);
         }
         return sInstance;
+    }
+
+    public boolean isUdfpsSupported() {
+        if (mIsUdfpsSupported == null) {
+            mIsUdfpsSupported = false;
+            FingerprintManager fpm = Utils.getFingerprintManagerOrNull(mContext);
+            if (fpm != null) {
+                List<FingerprintSensorPropertiesInternal> props = fpm.getSensorPropertiesInternal();
+                if (props != null) {
+                    for (FingerprintSensorPropertiesInternal prop : props) {
+                        if (prop.isAnyUdfpsType()) {
+                            mIsUdfpsSupported = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return mIsUdfpsSupported;
     }
 
     public boolean isQuickLaunchEnabled() {
