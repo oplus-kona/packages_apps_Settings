@@ -5908,6 +5908,18 @@
                 android:value="com.android.settings.fuelgauge.sleepmode.SleepMode" />
         </activity>
 
+        <activity android:name="Settings$DeepDozeActivity"
+            android:label="@string/deep_doze_title"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.settings.DEEP_DOZE_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.android.settings.fuelgauge.deepdoze.DeepDozeSettings" />
+        </activity>
+
         <activity android:name=".Settings$FingerprintSettingsActivityV2"
             android:label="@string/security_settings_fingerprint_preference_title"
             android:exported="false"

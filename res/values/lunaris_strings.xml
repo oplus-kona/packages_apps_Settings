@@ -281,4 +281,26 @@
     <string name="one_time_data_limit_when_exceeded">When exceeded</string>
     <string name="one_time_data_limit_turn_off_notify">Turn off and notify</string>
     <string name="one_time_data_limit_notify_only">Notify only</string>
+
+    <string name="deep_doze_title">Deep Doze</string>
+    <string name="deep_doze_summary">Aggressive idle state, radio suspension, and wake lock suppression</string>
+    <string name="deep_doze_banner_title">Aggressive Idle Enforcement</string>
+    <string name="deep_doze_banner_summary">Upon screen-off, Deep Doze bypasses delay timers to enter deep idle mode immediately. Radios, Wi-Fi/BT background scanning, location, account sync, and sensors are suspended. Non-whitelisted apps and Google Play Services wake locks are suppressed.</string>
+    <string name="deep_doze_status_category">Session Metrics</string>
+    <string name="deep_doze_timeline_title">Timeline</string>
+    <string name="deep_doze_latency_title">Time to Enter Deep Doze</string>
+    <string name="deep_doze_drain_title">Battery Drained</string>
+    <string name="deep_doze_disturbance_category">Disturbance Log</string>
+    <string name="deep_doze_disturbance_empty">No wake lock disturbances recorded. The device rested undisturbed.</string>
+    <string name="deep_doze_exceptions_category">Protected Core Utilities</string>
+    <string name="deep_doze_exceptions_summary">Phone calls, SMS/MMS, and Clock alarms are whitelisted and never terminated.</string>
+    <string name="deep_doze_radios_category">Hardware &amp; System Suppression</string>
+    <string name="deep_doze_radios_summary">Wi-Fi, Bluetooth, Mobile Data, NFC, background location, account auto-sync, AOD/ambient pulse, and motion sensors are shut off when deep doze starts and restored when the screen turns on.</string>
+    <string name="deep_doze_sleep_category">Night Sleep Features</string>
+    <string name="deep_doze_schedule_mode_title">Night Sleep Hours Only</string>
+    <string name="deep_doze_schedule_mode_summary">Only engage Deep Doze between 11:00 PM and 7:00 AM while sleeping</string>
+    <string name="deep_doze_pre_alarm_title">Pre-Alarm Network Warming</string>
+    <string name="deep_doze_pre_alarm_summary">Wake network 3 minutes before morning alarm to pre-sync notifications</string>
+    <string name="deep_doze_repeat_callers_title">Repeat Callers Breakthrough</string>
+    <string name="deep_doze_repeat_callers_summary">Allow repeated calls within 15 minutes to unmute ringer for urgent emergencies</string>
 </resources>
